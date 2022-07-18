@@ -13,6 +13,9 @@ Product Service Domain URL:
 URL on Pull Request with update SPA:
 - https://github.com/viktordavidovich/shop-angular-cloudfront/pull/2
 
+Swagger URL:
+- https://0g62az8mnf.execute-api.us-east-1.amazonaws.com/swagger
+
 Product Schema Example:
 ```json
 {

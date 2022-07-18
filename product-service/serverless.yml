@@ -21,6 +21,7 @@ functions:
           path: /products/{productId}
           method: get
 plugins:
+  - serverless-auto-swagger
   - serverless-webpack
 custom:
   webpack:
