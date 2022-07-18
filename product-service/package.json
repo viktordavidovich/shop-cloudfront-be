@@ -1,0 +1,28 @@
+{
+  "name": "product-service",
+  "version": "1.0.0",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=14.15.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.0",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-typescript": "^7.10.4",
+    "aws-lambda": "^1.0.7",
+    "@types/aws-lambda": "^8.10.101",
+    "@types/node": "14.18.22",
+    "babel-loader": "^8.1.0",
+    "cache-loader": "^4.1.0",
+    "fork-ts-checker-webpack-plugin": "^5.0.12",
+    "serverless": "3.21.0",
+    "serverless-offline": "^6.5.0",
+    "serverless-webpack": "^5.7.1",
+    "typescript": "^3.9.7",
+    "webpack": "^4.44.1",
+    "webpack-node-externals": "^2.5.0"
+  }
+}
