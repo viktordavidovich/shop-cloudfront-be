@@ -1,5 +1,11 @@
 ## Product Service API
 
+To run unit tests use the following command: 
+
+```
+npm run test
+```
+
 Product Service Domain URL:
 - https://0g62az8mnf.execute-api.us-east-1.amazonaws.com
 
