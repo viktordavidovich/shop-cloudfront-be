@@ -14,12 +14,25 @@ functions:
       - httpApi:
           path: /products
           method: get
+          swaggerTags: ['Product Service API']
+          responseData:
+            200:
+              description: 'Returns list of products (mock)'
+              bodyType: 'Products'
   getProductsById:
     handler: src/functions/get-products-by-id.getProductsById
     events:
       - httpApi:
           path: /products/{productId}
           method: get
+          swaggerTags: ['Product Service API']
+          responseData:
+            200:
+              description: 'Returns product by given Id (from mock)'
+              bodyType: 'Products'
+            404:
+              description: 'Product is not found by given Id (from mock)'
+              bodyType: 'Error'
 plugins:
   - serverless-auto-swagger
   - serverless-webpack
@@ -29,3 +42,9 @@ custom:
     includeModules: true
     packager: 'npm'
     excludeFiles: src/**/*.test.js
+  autoswagger:
+    title: 'Product Service API'
+    apiType: 'httpApi'
+    generateSwaggerOnDeploy: true
+    typefiles: [ './src/types/products.d.ts' ]
+    schemes: [ 'https' ]

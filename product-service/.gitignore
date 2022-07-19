@@ -3,3 +3,5 @@ jspm_packages
 .serverless
 .webpack
 .webpackCache
+swagger
+coverage
