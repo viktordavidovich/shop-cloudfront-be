@@ -9,6 +9,6 @@ export const getProductsList = async (event: APIGatewayEvent, context: Context):
     headers: {
       ...DEFAULT_AWS_GATEWAY_API_RESPONSE_HEADERS
     },
-    body: JSON.stringify(PRODUCTS),
+    body: JSON.stringify(PRODUCTS)
   };
 };

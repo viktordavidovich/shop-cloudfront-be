@@ -19,7 +19,7 @@ describe('getProductsById function', function () {
     const result = await getProductsById(event, context)
 
     expect(result.statusCode).toEqual(RESPONSE_STATUS_CODES.OK);
-    expect(result.body).toEqual(`${JSON.stringify([product])}`);
+    expect(result.body).toEqual(`${JSON.stringify(product)}`);
   });
 
   test('should return 404 if product not found', async () => {

@@ -15,9 +15,10 @@ functions:
           path: /products
           method: get
           swaggerTags: ['Product Service API']
+          produces: ['application/json']
           responseData:
             200:
-              description: 'Returns list of products (mock)'
+              description: 'Returns list of products (from mock)'
               bodyType: 'Products'
   getProductsById:
     handler: src/functions/get-products-by-id.getProductsById
@@ -26,10 +27,11 @@ functions:
           path: /products/{productId}
           method: get
           swaggerTags: ['Product Service API']
+          produces: ['application/json']
           responseData:
             200:
               description: 'Returns product by given Id (from mock)'
-              bodyType: 'Products'
+              bodyType: 'Product'
             404:
               description: 'Product is not found by given Id (from mock)'
               bodyType: 'Error'
@@ -41,7 +43,7 @@ custom:
     webpackConfig: 'webpack.config.js'
     includeModules: true
     packager: 'npm'
-    excludeFiles: src/**/*.test.js
+    excludeFiles: ['src/**/*.test.js', 'src/**/*.test.ts']
   autoswagger:
     title: 'Product Service API'
     apiType: 'httpApi'

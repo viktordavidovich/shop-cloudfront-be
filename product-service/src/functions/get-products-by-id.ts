@@ -4,11 +4,11 @@ import { DEFAULT_AWS_GATEWAY_API_RESPONSE_HEADERS, RESPONSE_STATUS_CODES }  from
 
 export const getProductsById = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
 
-  const product = PRODUCTS.filter((product) => {
+  const product = PRODUCTS.find((product) => {
     return product.id === event.pathParameters?.productId
   })
 
-  if (!product || !product.length) {
+  if (!product) {
     return {
       statusCode: RESPONSE_STATUS_CODES.NOT_FOUND,
       headers: {
@@ -16,7 +16,7 @@ export const getProductsById = async (event: APIGatewayEvent, context: Context):
       },
       body: JSON.stringify({
         message: 'Product not found.'
-      }),
+      })
     }
   }
 
@@ -25,6 +25,6 @@ export const getProductsById = async (event: APIGatewayEvent, context: Context):
     headers: {
       ...DEFAULT_AWS_GATEWAY_API_RESPONSE_HEADERS
     },
-    body: JSON.stringify(product),
+    body: JSON.stringify(product)
   };
 };
