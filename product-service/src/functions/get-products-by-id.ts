@@ -1,5 +1,6 @@
 import { Context, APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
-import PRODUCTS from "../mock/products.json";
+import  PRODUCTS  from "../mock/products.json";
+import { DEFAULT_AWS_GATEWAY_API_RESPONSE_HEADERS, RESPONSE_STATUS_CODES }  from "../common"
 
 export const getProductsById = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
 
@@ -9,10 +10,9 @@ export const getProductsById = async (event: APIGatewayEvent, context: Context):
 
   if (!product || !product.length) {
     return {
-      statusCode: 404,
+      statusCode: RESPONSE_STATUS_CODES.NOT_FOUND,
       headers: {
-        "Access-Control-Allow-Origin": "*",
-        "content-type": "application/json"
+        ...DEFAULT_AWS_GATEWAY_API_RESPONSE_HEADERS
       },
       body: JSON.stringify({
         message: 'Product not found.'
@@ -21,10 +21,9 @@ export const getProductsById = async (event: APIGatewayEvent, context: Context):
   }
 
   return {
-    statusCode: 200,
+    statusCode: RESPONSE_STATUS_CODES.OK,
     headers: {
-      "Access-Control-Allow-Origin": "*",
-      "content-type": "application/json"
+      ...DEFAULT_AWS_GATEWAY_API_RESPONSE_HEADERS
     },
     body: JSON.stringify(product),
   };

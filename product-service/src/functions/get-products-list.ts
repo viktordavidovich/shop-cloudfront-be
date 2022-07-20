@@ -1,12 +1,13 @@
 import { Context, APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import PRODUCTS from "../mock/products.json";
+import { DEFAULT_AWS_GATEWAY_API_RESPONSE_HEADERS, RESPONSE_STATUS_CODES }  from "../common"
 
 export const getProductsList = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
+
   return {
-    statusCode: 200,
+    statusCode: RESPONSE_STATUS_CODES.OK,
     headers: {
-      "Access-Control-Allow-Origin": "*",
-      "content-type": "application/json"
+      ...DEFAULT_AWS_GATEWAY_API_RESPONSE_HEADERS
     },
     body: JSON.stringify(PRODUCTS),
   };

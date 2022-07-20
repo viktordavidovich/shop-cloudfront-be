@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "handler.js",
   "scripts": {
+    "deploy": "serverless deploy",
     "test": "jest --config=jest.config.test.js"
   },
   "engines": {

@@ -1,6 +1,7 @@
 import { APIGatewayProxyEvent, Context } from "aws-lambda";
 import { getProductsById } from "./get-products-by-id";
 import PRODUCTS from "../mock/products.json";
+import { RESPONSE_STATUS_CODES } from '../common';
 
 describe('getProductsById function', function () {
   test('should return successful response', async () => {
@@ -17,7 +18,7 @@ describe('getProductsById function', function () {
 
     const result = await getProductsById(event, context)
 
-    expect(result.statusCode).toEqual(200);
+    expect(result.statusCode).toEqual(RESPONSE_STATUS_CODES.OK);
     expect(result.body).toEqual(`${JSON.stringify([product])}`);
   });
 
@@ -37,7 +38,7 @@ describe('getProductsById function', function () {
 
     const result = await getProductsById(event, context)
 
-    expect(result.statusCode).toEqual(404);
+    expect(result.statusCode).toEqual(RESPONSE_STATUS_CODES.NOT_FOUND);
     expect(result.body).toEqual(`${JSON.stringify(error)}`);
   });
 });
