@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "preserveConstEnums": true,
+    "strictNullChecks": true,
+    "inlineSources": true,
+    "inlineSourceMap": true,
+    "sourceRoot": "/",
+    "target": "es2020",
+    "outDir": ".build",
+    "noEmit": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "lib": ["es2020", "dom"],
+    "rootDir": "./src",
+    "include": ["./src/**/*.ts", "./src/types/api-types.d.ts"],
+    "exclude": [
+      "**/*.spec.ts",
+      "**/*.test.ts"
+    ]
+  }
+}

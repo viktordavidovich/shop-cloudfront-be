@@ -1,0 +1,52 @@
+service: product-service
+frameworkVersion: '3'
+configValidationMode: error
+package:
+  individually: true
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-1
+functions:
+  getProductsList:
+    handler:  src/functions/get-products-list.getProductsList
+    events:
+      - httpApi:
+          path: /products
+          method: get
+          swaggerTags: ['Product Service API']
+          produces: ['application/json']
+          responseData:
+            200:
+              description: 'Returns list of products (from mock)'
+              bodyType: 'Products'
+  getProductsById:
+    handler: src/functions/get-products-by-id.getProductsById
+    events:
+      - httpApi:
+          path: /products/{productId}
+          method: get
+          swaggerTags: ['Product Service API']
+          produces: ['application/json']
+          responseData:
+            200:
+              description: 'Returns product by given Id (from mock)'
+              bodyType: 'Product'
+            404:
+              description: 'Product is not found by given Id (from mock)'
+              bodyType: 'Error'
+plugins:
+  - serverless-auto-swagger
+  - serverless-webpack
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules: true
+    packager: 'npm'
+    excludeFiles: ['src/**/*.test.js', 'src/**/*.test.ts']
+  autoswagger:
+    title: 'Product Service API'
+    apiType: 'httpApi'
+    generateSwaggerOnDeploy: true
+    typefiles: [ './src/types/api-types.d.ts' ]
+    schemes: [ 'https' ]
