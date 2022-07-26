@@ -10,5 +10,12 @@ export interface Product {
   title: string;
 }
 
+export interface CreateProduct {
+  count: number;
+  description: string;
+  price: number;
+  title: string;
+}
+
 export type Products = Array<Product>
 
