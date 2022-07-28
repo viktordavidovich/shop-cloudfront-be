@@ -5,3 +5,4 @@ jspm_packages
 .webpackCache
 swagger
 coverage
+environment-variables.json

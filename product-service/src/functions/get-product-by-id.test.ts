@@ -1,15 +1,40 @@
 import { APIGatewayProxyEvent, Context } from "aws-lambda";
 import { getProductsById } from "./get-products-by-id";
-import PRODUCTS from "../mock/products.json";
+import { Product } from '../@types/api-types';
 import { RESPONSE_STATUS_CODES } from '../common';
 
+const product: Product = {
+  id: "0d308af6-1a39-4600-bc85-af0a9c409cec",
+  title: "Product title",
+  description: "Product description",
+  price: 10,
+  count: 1
+}
+
+jest.mock('../common', () => {
+  const originalModule = jest.requireActual('../common');
+  const mClient = {
+    connect: jest.fn().mockResolvedValue(''),
+    query: jest.fn().mockResolvedValue({ rows: [product]}),
+    end: jest.fn().mockResolvedValue('')
+  };
+  return {
+    ...originalModule,
+    __esModule: true,
+    db: jest.fn(() => mClient)
+  };
+});
+
 describe('getProductsById function', function () {
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('should return successful response', async () => {
-    const productId = PRODUCTS[0].id;
-    const product = PRODUCTS[0];
     const event = {
       pathParameters: {
-        productId: productId
+        productId: product.id
       }
     } as unknown as APIGatewayProxyEvent
     const context = {
@@ -22,23 +47,7 @@ describe('getProductsById function', function () {
     expect(result.body).toEqual(`${JSON.stringify(product)}`);
   });
 
-  test('should return 404 if product not found', async () => {
-    const productId = "1";
-    const error = {
-      message: "Product not found."
-    }
-    const event = {
-      pathParameters: {
-        productId: productId
-      }
-    } as unknown as APIGatewayProxyEvent
-    const context = {
-
-    } as Context
-
-    const result = await getProductsById(event, context)
-
-    expect(result.statusCode).toEqual(RESPONSE_STATUS_CODES.NOT_FOUND);
-    expect(result.body).toEqual(`${JSON.stringify(error)}`);
-  });
 });
+
+
+

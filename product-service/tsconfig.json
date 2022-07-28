@@ -14,7 +14,11 @@
     "resolveJsonModule": true,
     "lib": ["es2020", "dom"],
     "rootDir": "./src",
-    "include": ["./src/**/*.ts", "./src/types/api-types.d.ts"],
+    "typeRoots": [
+      "@types/api-types.d.ts",
+      "node_modules/@types"
+    ],
+    "include": ["./src/**/*.ts", "./src/@types/api-types.d.ts"],
     "exclude": [
       "**/*.spec.ts",
       "**/*.test.ts"
