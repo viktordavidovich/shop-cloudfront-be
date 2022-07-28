@@ -1,7 +1,6 @@
 service: product-service
 frameworkVersion: '3'
 configValidationMode: error
-useDotenv: true
 package:
   individually: true
 provider:

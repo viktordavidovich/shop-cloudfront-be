@@ -2,6 +2,7 @@ import { db, DEFAULT_AWS_GATEWAY_API_RESPONSE_HEADERS, RESPONSE_STATUS_CODES } f
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { Pool } from "pg";
 import { DB_OPTIONS } from '../common/db/connection';
+import { Product } from '../@types/api-types';
 
 const pool = new Pool(DB_OPTIONS);
 
@@ -10,21 +11,49 @@ export const createProduct = async (event: APIGatewayEvent, context: Context): P
   console.log(`Event: ${JSON.stringify(event)}`);
   console.log(`Context: ${JSON.stringify(context)}`);
 
-  const { title, description, price, count } = JSON.parse(event.body as string);
-
-  console.log('count', count);
-  console.log('typeof count', typeof count);
+  const { title, description = '', price, count } = JSON.parse(event.body as string);
 
   try {
     const client = await pool.connect();
+
+    pool.on('error', (e, client)=> {
+      throw new Error(JSON.stringify({ message: 'DB POOL PRODUCE EMITTED ERROR EVENT', error: e, client }))
+    })
+
     try {
-
       await client.query('BEGIN')
-      const insertResult = await client.query('insert into products (title, description, price)  values ($1, $2, $3) returning id', [title, description, price]);
-      const id = insertResult.rows[0]?.id;
+      let id: string;
+      try {
+        const insertResult = await client.query('insert into products (title, description, price)  values ($1, $2, $3) returning id', [title, description, price]);
+        id = insertResult.rows.length && insertResult.rows[0]?.id;
+      } catch (e) {
+        await client.query('ROLLBACK')
+        return {
+          statusCode: RESPONSE_STATUS_CODES.BAD_REQUEST,
+          headers: {
+            ...DEFAULT_AWS_GATEWAY_API_RESPONSE_HEADERS
+          },
+          body: JSON.stringify({
+            message: `Product data is invalid.`
+          })
+        };
+      }
 
-      await client.query("insert into stocks (product_id, count) values ($1, $2)", [id, count]);
-      await client.query('COMMIT')
+      try {
+        await client.query("insert into stocks (product_id, count) values ($1, $2)", [id, count]);
+        await client.query('COMMIT')
+      } catch (e) {
+        await client.query('ROLLBACK')
+        return {
+          statusCode: RESPONSE_STATUS_CODES.BAD_REQUEST,
+          headers: {
+            ...DEFAULT_AWS_GATEWAY_API_RESPONSE_HEADERS
+          },
+          body: JSON.stringify({
+            message: `Product data is invalid.`
+          })
+        };
+      }
 
       return {
         statusCode: RESPONSE_STATUS_CODES.CREATED,
@@ -37,19 +66,19 @@ export const createProduct = async (event: APIGatewayEvent, context: Context): P
           description,
           price,
           count
-        })
+        } as Product)
       };
 
     } catch (e) {
       await client.query('ROLLBACK')
 
       return {
-        statusCode: RESPONSE_STATUS_CODES.BAD_REQUEST,
+        statusCode: RESPONSE_STATUS_CODES.INTERNAL_SERVER_ERROR,
         headers: {
           ...DEFAULT_AWS_GATEWAY_API_RESPONSE_HEADERS
         },
         body: JSON.stringify({
-          message: `Product data is invalid.`
+          message: `DB QUERY ERROR ${JSON.stringify(e)}`
         })
       };
 
